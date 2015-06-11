@@ -20,5 +20,5 @@ class Index:
 
     def next(self):
         num = random.getrandbits(self._bit_count)
-        return radix.str(num, 62)
+        return radix.str(num, 64)
 

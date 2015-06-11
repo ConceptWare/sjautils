@@ -23,7 +23,7 @@ def str( number, radix ):
    """str( number, radix ) -- reverse function to int(str,radix) and long(str,radix)"""
 
 
-   abc = string.digits + string.letters
+   abc = string.digits + string.letters + '?$'
    maxr = len(abc)
    if not 2 <= radix <= maxr:
        raise ValueError, "radix must be in 2..%d" % maxr
