@@ -16,7 +16,7 @@ print radix.str( 10, 16 ), radix.str( 1570137287, 36 ) # a python
 """
 
 
-import string
+import string, random
 
 
 def str( number, radix ):
@@ -44,6 +44,8 @@ def str( number, radix ):
 
    # never here because number >= 0, radix > 0, we repeat (number /= radix)
 
+def random_id(id_bit_size, alphabet_size=64):
+   return str(random.getrandbits(id_bit_size), alphabet_size)
 
 if __name__ == '__main__':
    src = 'qwertyuioplkjhgfdsazxcvbnm0987654321'

@@ -1,7 +1,5 @@
 import random
-
 import radix
-
 
 class Index:
 
