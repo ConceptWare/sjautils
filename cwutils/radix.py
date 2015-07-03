@@ -18,7 +18,6 @@ print radix.str( 10, 16 ), radix.str( 1570137287, 36 ) # a python
 
 import string, random
 
-
 def str( number, radix ):
    """str( number, radix ) -- reverse function to int(str,radix) and long(str,radix)"""
 

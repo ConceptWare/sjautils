@@ -4,19 +4,6 @@ from collections import defaultdict
 def force_unicode(x):
     return x.decode('utf-8') if isinstance(x, str) else x
 
-class DictObject:
-    """Wraps a dictionary so that its contents can be accessed directly like properties"""
-    @classmethod
-    def wrapping(cls, dictionary):
-        return cls(dictionary)
-
-    @classmethod
-    def wrapping_result(cls, dictionary_function):
-        return cls.wrapping(dictionary_function())
-
-    def __init__(self, dictionary):
-        self.__dict__.update(dictionary)
-
 identity_function = lambda x: x
 
 def n_defaultdict(n, a_type):
@@ -171,3 +158,19 @@ def plain2cipher(key, plain):
 
 def cipher2plain(key, cipher):
     return decrypt(key, hexord2str(cipher))
+
+class DictObject(dict):
+    def __init__(self, *args, **kwargs):
+        super(DictObject, self).__init__(*args, **kwargs)
+
+    def __getattr__(self, name):
+        if name in self:
+            return super(DictObject, self)[name]
+        else:
+            raise AttributeError('%s object has no attribute %s'% (self.__class__.__name__, name))
+
+    def __setattr__(self, name, val):
+        self[name] = val
+
+
+
