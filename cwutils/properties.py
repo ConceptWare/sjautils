@@ -1,20 +1,39 @@
 __author__ = 'samantha'
+from .tools import gensym
 
 class reader(property):
-    def __init__(self, varname):
-        _reader = lambda obj: getattr(obj, varname)
-        super(reader, self).__init__(_reader)
+    def __init__(self, varname, default=None):
+        def _reader(obj):
+            if not hasattr(obj, varname):
+                setattr(obj, varname, default)
+            return getattr(obj, varname)
+        property.__init__(self, _reader)
 
-class accessor(property):
-    def __init__(self, varname):
-        _reader = lambda obj: getattr(obj, varname)
-        def _writer(obj, value):
-            setattr(obj, varname, value)
-        super(accessor, self).__init__(_reader, _writer)
+def read_only(var_name):
+    def varname(object):
+        return var_name if var_name else gensym(object)
+    def reader(self):
+        name = varname(self)
+        if not hasattr(self, name):
+            setattr(self, name, None)
+        return getattr(self, name)
 
-def abstract(fun):
-    def inner(*args, **rest):
-        raise Exception('Subclass must implement %s' % fun.__name__)
-    inner.__name__ = fun.__name__
-    return inner
+    return property(reader)
+
+def accessor(var_name=None):
+    def varname(object):
+        return var_name if var_name else gensym(object)
+    def reader(self):
+        name = varname(self)
+        if not hasattr(self, name):
+            setattr(self, name, None)
+        return getattr(self, name)
+
+    def writer(self, value):
+        setattr(self, varname(self), value)
+
+
+    return property(reader, writer)
+
+read_write_var = accessor
 
