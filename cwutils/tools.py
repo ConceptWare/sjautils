@@ -160,8 +160,8 @@ def cipher2plain(key, cipher):
     return decrypt(key, hexord2str(cipher))
 
 class DictObject(dict):
-    def __init__(self, *args, **kwargs):
-        super(DictObject, self).__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super(DictObject, self).__init__(**kwargs)
 
     def __getattr__(self, name):
         if name in self:
@@ -171,6 +171,4 @@ class DictObject(dict):
 
     def __setattr__(self, name, val):
         self[name] = val
-
-
 
