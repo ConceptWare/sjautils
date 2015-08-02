@@ -3,7 +3,6 @@ from itertools import chain
 
 from .tools import unique
 
-
 def identity_function(x):
     return x
 

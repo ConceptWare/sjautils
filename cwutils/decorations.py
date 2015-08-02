@@ -7,10 +7,8 @@ def synchronized(func):
             return func(*args, **kwargs)
     return _guarded
 
+def abstract(func):
+    raise '%s needs a non-abstract implementation' % func.__name__
 
-
-
-class Foo:
-    whatever = read_write_var()
 
 
