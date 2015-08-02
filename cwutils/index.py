@@ -1,6 +1,10 @@
 import random
 import radix
 
+def make_id(nbits):
+    num = random.getrandbits(nbits)
+    return radix.str(num, 62)
+
 class Index:
 
     """This class generates base 64 encoded strings from a random number of bits."""
@@ -17,6 +21,5 @@ class Index:
         self.__class__.by_name[name] = self
 
     def next(self):
-        num = random.getrandbits(self._bit_count)
-        return radix.str(num, 62)
+        return make_id(self._bit_count)
 

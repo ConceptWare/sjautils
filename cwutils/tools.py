@@ -113,18 +113,13 @@ def plain2cipher(key, plain):
 def cipher2plain(key, cipher):
     return decrypt(key, hexord2str(cipher))
 
-class DictObject(dict):
-    def __init__(self, *args, **kwargs):
-        super(DictObject, self).__init__(*args, **kwargs)
 
-    def __getattr__(self, name):
-        if name in self:
-            return super(DictObject, self)[name]
-        else:
-            raise AttributeError('%s object has no attribute %s'% (self.__class__.__name__, name))
+class ObjectDict(dict):
+    def __init__(self, **contents):
+        super(ObjectDict, self).__init__(**contents)
 
-    def __setattr__(self, name, val):
-        self[name] = val
+    def __getattr__(self, key):
+        return self.get(key)
 
-
-
+    def __setattr__(self, key, val):
+        self[key] = val
