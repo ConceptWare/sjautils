@@ -214,3 +214,8 @@ def splitter(lst):
   if sz == 2:
     return lst[:-1], lst[-1:]
   return lst[:sz / 2], lst[sz / 2:]
+
+def random_pick(lst):
+  return lst[random.randint(0, len(lst)-1)]
+
+
