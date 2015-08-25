@@ -100,26 +100,26 @@ if __name__ == '__main__':
     self._children.append(c)
 
 
-def gen_test(value):
-  return lambda x: x.val == value
+  def gen_test(value):
+    return lambda x: x.val == value
 
 
-children = lambda x: x._children
-root = Node(6)
-a = Node(5)
-b = Node(4)
-c = Node(6)
-d = Node(4)
-e = Node(4)
-root.add_child(b)
-root.add_child(c)
-c.add_child(d)
-b.add_child(e)
-res = pruning_tree_collect(root, children, gen_test(4))
-# print res
-assert (len(res) == 2)
-assert (b in res)
-assert (d in res)
+  children = lambda x: x._children
+  root = Node(6)
+  a = Node(5)
+  b = Node(4)
+  c = Node(6)
+  d = Node(4)
+  e = Node(4)
+  root.add_child(b)
+  root.add_child(c)
+  c.add_child(d)
+  b.add_child(e)
+  res = pruning_tree_collect(root, children, gen_test(4))
+  # print res
+  assert (len(res) == 2)
+  assert (b in res)
+  assert (d in res)
 
 
 def all_satisfy(func, sequence):
