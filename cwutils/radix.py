@@ -43,7 +43,7 @@ def str( number, radix ):
 
    # never here because number >= 0, radix > 0, we repeat (number /= radix)
 
-def random_id(id_bit_size, alphabet_size=64):
+def random_id(id_bit_size, alphabet_size=62):
    return str(random.getrandbits(id_bit_size), alphabet_size)
 
 if __name__ == '__main__':

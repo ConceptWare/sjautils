@@ -66,62 +66,6 @@ def pruning_tree_collect(root, children_function, test_function, result_function
   return results
 
 
-if __name__ == '__main__':
-  # test pruning_tree__collect
-  class Node:
-    def __init__(self, value):
-      self.val = value
-      self._children = []
-
-    def add_child(self, c):
-      self._children.append(c)
-
-  def gen_test(value):
-    return lambda x: x.val == value
-
-  children = lambda x: x._children
-  root = Node(6)
-  a = Node(5)
-  b = Node(4)
-  c = Node(6)
-  d = Node(4)
-  e = Node(4)
-  root.add_child(b)
-  root.add_child(c)
-  c.add_child(d)
-  b.add_child(e)
-  res = pruning_tree_collect(root, children, gen_test(4))
-  # print res
-  assert (len(res) == 2)
-  assert (b in res)
-  assert (d in res)
-
-  def add_child(self, c):
-    self._children.append(c)
-
-
-  def gen_test(value):
-    return lambda x: x.val == value
-
-
-  children = lambda x: x._children
-  root = Node(6)
-  a = Node(5)
-  b = Node(4)
-  c = Node(6)
-  d = Node(4)
-  e = Node(4)
-  root.add_child(b)
-  root.add_child(c)
-  c.add_child(d)
-  b.add_child(e)
-  res = pruning_tree_collect(root, children, gen_test(4))
-  # print res
-  assert (len(res) == 2)
-  assert (b in res)
-  assert (d in res)
-
-
 def all_satisfy(func, sequence):
   """
   Returns (True, None) if all elements satisfy func else (False, element) of the first element that
