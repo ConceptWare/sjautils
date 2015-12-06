@@ -20,12 +20,9 @@ def partition(data, key_extractor, data_changer=identity_function):
 
     return partitions
 
-def dict_splitter(dict_data, test):
-    split_1 = partition(dict_data.items(), test)
-    return dict(split_1[True], split_1[False])
 
-def binary_partition(data, key_extractor, data_changer=identity_function):
-    p = partition(data, key_extractor, data_changer)
+def binary_partition(data, item_test):
+    p = partition(data, item_test)
     return p[True], p[False]
 
 
