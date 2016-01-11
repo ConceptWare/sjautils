@@ -165,6 +165,20 @@ class ObjectDict(dict):
   def __setattr__(self, key, val):
     self[key] = val
 
+def dict_diff(incoming, existing):
+  """
+  Compute and return dictionary of changes in incoming
+  from what is in existing including new keys.  This only does
+  the top level in case of nested dictionary.
+  :param incoming: incoming changes
+  :param existing: existing dictionary information
+  :return: actual changes from incoming over existing
+  """
+  result = {}
+  for k,v in incoming:
+    if v != existing.get(k, None):
+      result[k] = v
+  return result
 
 def splitter(lst):
   sz = len(lst)
