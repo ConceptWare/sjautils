@@ -175,7 +175,7 @@ def dict_diff(incoming, existing):
   :return: actual changes from incoming over existing
   """
   result = {}
-  for k,v in incoming:
+  for k,v in incoming.items():
     if v != existing.get(k, None):
       result[k] = v
   return result
