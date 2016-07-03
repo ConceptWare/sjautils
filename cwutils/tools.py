@@ -88,7 +88,6 @@ def one_satisfies(func, sequence):
 def identity(x): return x
 
 
-def identity(x): return x
 
 
 def unique(sequence, hash_converter=None):

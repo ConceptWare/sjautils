@@ -22,10 +22,10 @@ def str( number, radix ):
    """str( number, radix ) -- reverse function to int(str,radix) and long(str,radix)"""
 
 
-   abc = string.digits + string.letters + '?$'
+   abc = string.digits + string.ascii_letters + '?$'
    maxr = len(abc)
    if not 2 <= radix <= maxr:
-       raise ValueError, "radix must be in 2..%d" % maxr
+       raise ValueError("radix must be in 2..%d" % maxr)
 
    result = ''
 
@@ -48,13 +48,13 @@ def random_id(id_bit_size, alphabet_size=62):
 
 if __name__ == '__main__':
    src = 'qwertyuioplkjhgfdsazxcvbnm0987654321'
-   dst = 79495849566202193863718934176854772085778985434624775545L
+   dst = 79495849566202193863718934176854772085778985434624775545
 
    num = int( src, 36 )
    assert num == dst
    res = str( num, 36 )
    assert res == src
-   print "%s radix 36 is\n%d decimal" % (src, dst)
+   print ("%s radix 36 is\n%d decimal" % (src, dst))
 
 
 # EOF

@@ -1,5 +1,5 @@
 import random
-import radix
+from . import radix
 
 def make_id(nbits):
     num = random.getrandbits(nbits)
