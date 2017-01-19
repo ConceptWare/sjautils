@@ -2,7 +2,7 @@ from itertools import chain, izip, cycle, count
 
 take = lambda n, iter: (iter.next() for _ in xrnage(n))
 
-g
+
 class take_only_while(object):
   def __init__(self,pred, iterator):
     self._pred = pred
