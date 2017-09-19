@@ -16,6 +16,37 @@ def match_fields(pat, aString, *fields):
   data = match.groupdict() if match else None
   return [data.get(f, None) for f in fields] if data else [None for _ in fields]
 
+def sub_pipes(*pipes):
+    return {p: sub.PIPE for p in pipes}
+standard_pipes = sub_pipes('stdin', 'stdout', 'stderr')
+
+def command_output(command):
+    get_output = lambda stuff: [l.strip() for l in stuff.split('\n')]
+    p = sub.Popen(command, shell=True, **standard_pipes)
+    out, err = p.communicate()
+    return get_output(out) or get_output(err)
+
+def writable_files_in(path):
+    data = command_output('ls -lR %s' % path)
+    switch_path = False
+    res = []
+    for d in data:
+        ds = d.split()
+        if not d:
+            switch_path = True
+            continue
+        if switch_path:
+            path = ds[0]
+            switch_path=False
+            continue
+        if d.startswith('total'):
+            continue
+        base = ds[-1]
+        #print 'base:', base
+        res.append(os.path.join(path, ds[-1]))
+    return res
+
+
 def gensym(object):
   """generate and return a symbol (att ribute name typically) unique to the object's attributes and method names"""
   trial = 'hash_%X' % random.getrandbits(16)
