@@ -1,6 +1,20 @@
 from collections import defaultdict
-import random
+import random, re
+import validators
 
+def is_url(string):
+  if not './/' in string:
+    string = 'https://' + string
+    trial = validators.url(string)
+    if not isinstance(trial,validators.ValidationFailure):
+      return string
+    return False
+
+
+def match_fields(pat, aString, *fields):
+  match = re.search(pat, aString)
+  data = match.groupdict() if match else None
+  return [data.get(f, None) for f in fields] if data else [None for _ in fields]
 
 def gensym(object):
   """generate and return a symbol (att ribute name typically) unique to the object's attributes and method names"""
