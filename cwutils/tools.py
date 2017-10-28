@@ -1,6 +1,7 @@
 from collections import defaultdict
 import random, re
 import validators
+import subprocess as sub
 
 def is_url(string):
   if not './/' in string:
@@ -9,6 +10,21 @@ def is_url(string):
     if not isinstance(trial,validators.ValidationFailure):
       return string
     return False
+
+def set_and(fn, values):
+  res = set()
+  for v in values:
+    res_v = fn(v)
+    if not res:
+      res.update(res_v)
+    else:
+      res = res & res_v
+    if not res_v:
+      break
+  return res_v
+
+def set_or(fn, values):
+  return reduce(lambda a, b: a | b, map(fn, values))
 
 
 def match_fields(pat, aString, *fields):

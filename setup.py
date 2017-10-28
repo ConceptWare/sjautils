@@ -8,4 +8,5 @@ setup(name='cwutils',
       author_email='samantha@conceptwareinc.com',
       license='internal',
       packages=['cwutils'],
+      install_requires = ['validators'],
       zip_safe=False)
