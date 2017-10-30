@@ -19,9 +19,9 @@ def set_and(fn, values):
       res.update(res_v)
     else:
       res = res & res_v
-    if not res_v:
+    if not res:
       break
-  return res_v
+  return res
 
 def set_or(fn, values):
   return reduce(lambda a, b: a | b, map(fn, values))
