@@ -2,6 +2,30 @@ from collections import defaultdict
 import random, re
 import validators
 import subprocess as sub
+from functools import reduce
+
+def as_list(fn, *args, **kwargs):
+  'because python3 made way two many things generators effectively'
+  return list(fn(*args, **kwargs))
+
+def lmap(fn, *iterables):
+  return as_list(map, fn, *iterables)
+
+def dict_keys(a_dict):
+  '''
+  Since 3.x was stupid enough to make dict.keys() return something not indexable
+  :param a_dict: the dict to get keys for
+  :return: return keys as a list
+  '''
+  return list(a_dict.keys())
+
+def dict_values(a_dict):
+  '''
+  Since 3.x was stupid enough to make dict.values() return something not indexable
+  :param a_dict: the dict to get keys for
+  :return: return keys as a list
+  '''
+  return list(a_dict.values())
 
 def is_url(string):
   if not './/' in string:
