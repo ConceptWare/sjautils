@@ -1,6 +1,8 @@
 import random
 from functools import wraps
+
 def synchronized(func):
+    @wraps(func)
     def _guarded(*args, **kwargs):
         lock = args[0]._instance_lock
         with lock:

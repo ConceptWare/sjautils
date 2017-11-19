@@ -1,6 +1,6 @@
 from itertools import chain, izip, cycle, count
 
-take = lambda n, iter: (iter.next() for _ in xrnage(n))
+take = lambda n, iter: (iter.next() for _ in range(n))
 
 
 class take_only_while(object):
@@ -38,6 +38,18 @@ def dropwhile(predicate, iterable):
     for x in iterable:
         yield x
 
+def replace_first(curr, iter):
+  """
+  Returns an iterator that first yields curr then items from iter
+  :param curr: item to return first
+  :param iter: other items
+  :return: iterator with curr first
+  """
+
+  yield curr
+  for item in iter:
+    yield item
+
 def take_while(pred, iter):
     for curr in iter:
         if pred(curr):
@@ -45,5 +57,5 @@ def take_while(pred, iter):
         else:
             break
         
-    if not perd(curr):
-        return _replace_first(curr, iter)
+    if not pred(curr):
+        return replace_first(curr, iter)
