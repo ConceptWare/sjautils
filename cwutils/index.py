@@ -3,7 +3,9 @@ from . import radix
 
 def make_id(nbits):
     num = random.getrandbits(nbits)
-    return radix.str(num, 62)
+    attempt = radix.str(num, 62)
+    return ('z' + attempt) if attempt[0].isdigit() else attempt
+
 
 class Index:
 

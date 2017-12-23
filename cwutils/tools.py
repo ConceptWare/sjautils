@@ -247,6 +247,8 @@ class ObjectDict(dict):
     return self.get(key)
 
   def __setattr__(self, key, val):
+    if isinstance(val, dict):
+      val = ObjectDict(**val)
     self[key] = val
 
 def dict_diff(incoming, existing):
@@ -277,3 +279,22 @@ def splitter(lst):
 
 def random_pick(lst):
   return lst[random.randint(0, len(lst) - 1)]
+
+
+class DictObject(dict):
+  def __init__(self, **data):
+    super().__init__(**data)
+    self._adjust_dicts()
+
+  def _adjust_dicts(self):
+    for k,v in self.items():
+      if isinstance(v, dict):
+        self[k] = DictObject(**v)
+        
+  def __getattr__(self, name):
+    return self.get(name)
+
+  def __setattr__(self, name, val):
+    if isinstance(val, dict):
+      val = DictObject(**val)
+    self[name] = val
