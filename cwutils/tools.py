@@ -4,6 +4,38 @@ import validators
 import subprocess as sub
 from functools import reduce
 
+class ByNameId:
+    def __init__(self, uses_name=True):
+        self._id_map = {}
+        self._name_map = {}
+        self._uses_name = uses_name
+
+    def id_map(self):
+        return dict(self._id_map)
+
+    def name_map(self):
+        return dict(self._name_map)
+
+    def values(self):
+        return self._id_map.values()
+
+    def add_item(self, item):
+        self._id_map[item._id] = item
+        if self._uses_name:
+          self._name_map[item.name] = item
+
+    def with_id(self, an_id):
+        return self._id_map.get(an_id)
+
+    def with_name(self, name):
+        return self._name_map.get(name)
+
+    def random_instance(self):
+        vals = list(self._id_map.values())
+        index = random.randint(0, len(vals)-1)
+        return vals[index] if vals else None
+      
+
 def as_list(fn, *args, **kwargs):
   'because python3 made way two many things generators effectively'
   return list(fn(*args, **kwargs))
@@ -290,7 +322,7 @@ class DictObject(dict):
     for k,v in self.items():
       if isinstance(v, dict):
         self[k] = DictObject(**v)
-        
+
   def __getattr__(self, name):
     return self.get(name)
 
