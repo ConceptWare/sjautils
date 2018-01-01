@@ -273,7 +273,11 @@ def cipher2plain(key, cipher):
 
 class ObjectDict(dict):
   def __init__(self, **contents):
+    for k,v in contents.items():
+      if isinstance(v, dict):
+        contents[k] = ObjectDict(**v)
     super(ObjectDict, self).__init__(**contents)
+    
 
   def __getattr__(self, key):
     return self.get(key)
