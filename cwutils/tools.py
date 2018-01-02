@@ -20,9 +20,9 @@ class ByNameId:
         return self._id_map.values()
 
     def add_item(self, item):
-        self._id_map[item._id] = item
+        self._id_map[item['_id']] = item
         if self._uses_name:
-          self._name_map[item.name] = item
+          self._name_map[item['name']] = item
 
     def with_id(self, an_id):
         return self._id_map.get(an_id)
