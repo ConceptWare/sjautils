@@ -1,5 +1,5 @@
 from collections import defaultdict
-import random, re
+import random, re, os
 import validators
 import subprocess as sub
 from functools import reduce
@@ -60,12 +60,13 @@ def dict_values(a_dict):
   return list(a_dict.values())
 
 def is_url(string):
-  if not './/' in string:
+  if not '://' in string:
     string = 'https://' + string
     trial = validators.url(string)
     if not isinstance(trial,validators.ValidationFailure):
-      return string
+      return True
     return False
+  return True
 
 def set_and(fn, values):
   res = set()
