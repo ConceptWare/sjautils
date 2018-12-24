@@ -93,11 +93,26 @@ def sub_pipes(*pipes):
     return {p: sub.PIPE for p in pipes}
 standard_pipes = sub_pipes('stdin', 'stdout', 'stderr')
 
+def bytesToString(val):
+  return val.decode('utf-8') if isinstance(val, bytes) else val
+
+def without_output(cmd):
+  with open(os.devnull, 'a') as out:
+    sub.Popen(cmd, shell=True, stdout=out, stderr=out)
+
+def with_output_to(path, cmd):
+  with open(path, 'a') as out:
+    sub.Popen(cmd, shell=True, stdout=out, stderr=out)
+
 def command_output(command):
-    get_output = lambda stuff: [l.strip() for l in stuff.split('\n')]
-    p = sub.Popen(command, shell=True, **standard_pipes)
-    out, err = p.communicate()
-    return get_output(out) or get_output(err)
+  standard_pipes = dict(
+    stdout=sub.PIPE, stdin=sub.PIPE, stderr=sub.PIPE)
+  get_output = lambda stuff: [l.strip() for l in stuff.split('\n') if l]
+  p = sub.Popen(command, shell=True, **standard_pipes)
+  out, err = p.communicate()
+  
+  res =  get_output(bytesToString(out)) or get_output(bytesToString(err))
+  return res[0] if (len(res) == 1) else res
 
 def writable_files_in(path):
     data = command_output('ls -lR %s' % path)
