@@ -4,36 +4,56 @@ import validators
 import subprocess as sub
 from functools import reduce
 
+def to_list(aDict):
+  '''
+  Convert nested dict with list and dict values to nested list.  Originally used as alternate
+  parsing of a UOP query dict representation. 
+  '''
+  raw = list(aDict.items())
+  res = []
+  for k,v in raw:
+    res.append(k)
+    if isinstance(v, list):
+      res.append([to_list(item) for item in v])
+    elif isinstance(v, dict):
+      res.append(to_list(v))
+    else:
+      res.append(v)
+  return res
+
 class ByNameId:
-    def __init__(self, uses_name=True):
-        self._id_map = {}
-        self._name_map = {}
-        self._uses_name = uses_name
+  '''
+  Provides by name and by id maps for dict like items that have both 'name' and '_id' fields
+  '''
+  def __init__(self, uses_name=True):
+    self._id_map = {}
+    self._name_map = {}
+    self._uses_name = uses_name
 
     def id_map(self):
-        return dict(self._id_map)
+      return dict(self._id_map)
 
     def name_map(self):
-        return dict(self._name_map)
+      return dict(self._name_map)
 
     def values(self):
-        return self._id_map.values()
+      return self._id_map.values()
 
     def add_item(self, item):
-        self._id_map[item['_id']] = item
-        if self._uses_name:
-          self._name_map[item['name']] = item
+      self._id_map[item['_id']] = item
+      if self._uses_name:
+        self._name_map[item['name']] = item
 
     def with_id(self, an_id):
-        return self._id_map.get(an_id)
+      return self._id_map.get(an_id)
 
     def with_name(self, name):
-        return self._name_map.get(name)
+      return self._name_map.get(name)
 
     def random_instance(self):
-        vals = list(self._id_map.values())
-        index = random.randint(0, len(vals)-1)
-        return vals[index] if vals else None
+      vals = list(self._id_map.values())
+      index = random.randint(0, len(vals)-1)
+      return vals[index] if vals else None
       
 
 def as_list(fn, *args, **kwargs):
