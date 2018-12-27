@@ -30,31 +30,31 @@ class ByNameId:
     self._name_map = {}
     self._uses_name = uses_name
 
-    def id_map(self):
-      return dict(self._id_map)
+  def id_map(self):
+    return dict(self._id_map)
 
-    def name_map(self):
-      return dict(self._name_map)
+  def name_map(self):
+    return dict(self._name_map)
 
-    def values(self):
-      return self._id_map.values()
+  def values(self):
+    return self._id_map.values()
 
-    def add_item(self, item):
-      self._id_map[item['_id']] = item
-      if self._uses_name:
-        self._name_map[item['name']] = item
+  def add_item(self, item):
+    self._id_map[item['_id']] = item
+    if self._uses_name:
+      self._name_map[item['name']] = item
 
-    def with_id(self, an_id):
-      return self._id_map.get(an_id)
+  def with_id(self, an_id):
+    return self._id_map.get(an_id)
 
-    def with_name(self, name):
-      return self._name_map.get(name)
+  def with_name(self, name):
+    return self._name_map.get(name)
 
-    def random_instance(self):
-      vals = list(self._id_map.values())
-      index = random.randint(0, len(vals)-1)
-      return vals[index] if vals else None
-      
+  def random_instance(self):
+    vals = list(self._id_map.values())
+    index = random.randint(0, len(vals)-1)
+    return vals[index] if vals else None
+
 
 def as_list(fn, *args, **kwargs):
   'because python3 made way two many things generators effectively'
