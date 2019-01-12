@@ -4,6 +4,13 @@ import validators
 import subprocess as sub
 from functools import reduce
 
+def pass_fail(items, test):
+  passed = [], failed = []
+  for item in items:
+    ctx = passed if test(item) else failed
+    ctx.append(item)
+  return passed, failed
+
 def to_list(aDict):
   '''
   Convert nested dict with list and dict values to nested list.  Originally used as alternate
@@ -89,13 +96,10 @@ def is_url(string):
   return True
 
 def set_and(fn, values):
-  res = set()
-  for v in values:
+  res = fn(values[0]);
+  for v in values[1:]:
     res_v = fn(v)
-    if not res:
-      res.update(res_v)
-    else:
-      res = res & res_v
+    res = res & res_v
     if not res:
       break
   return res
