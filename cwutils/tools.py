@@ -105,7 +105,7 @@ def set_and(fn, values):
   return res
 
 def set_or(fn, values):
-  return reduce(lambda a, b: a | b, map(fn, values))
+  return reduce(lambda a, b: a | b, map(fn, values), set())
 
 
 def match_fields(pat, aString, *fields):
