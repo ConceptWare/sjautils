@@ -18,6 +18,8 @@ print radix.str( 10, 16 ), radix.str( 1570137287, 36 ) # a python
 
 import string, random
 
+alphabet = string.digits + string.ascii_letters + '?$'
+
 def str( number, radix ):
    """str( number, radix ) -- reverse function to int(str,radix) and long(str,radix)"""
 
@@ -43,7 +45,7 @@ def str( number, radix ):
 
    # never here because number >= 0, radix > 0, we repeat (number /= radix)
 
-def random_id(id_bit_size, alphabet_size=62):
+def random_id(id_bit_size, alphabet_size=len(alphabet)):
    return str(random.getrandbits(id_bit_size), alphabet_size)
 
 if __name__ == '__main__':
