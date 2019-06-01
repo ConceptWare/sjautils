@@ -87,16 +87,19 @@ def dict_values(a_dict):
   return list(a_dict.values())
 
 def is_url(string):
-  if not '://' in string:
+  def test_prefix(prefix):
     string = 'https://' + string
     trial = validators.url(string)
     if not isinstance(trial,validators.ValidationFailure):
       return True
     return False
+
+  if not '://' in string:
+    return test_prefix('https') || test_prefix('http')
   return True
 
 def set_and(fn, values):
-  res = fn(values[0]);
+  res = fn(values[0])
   for v in values[1:]:
     res_v = fn(v)
     res = res & res_v

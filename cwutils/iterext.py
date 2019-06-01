@@ -1,4 +1,6 @@
 from itertools import chain, izip, cycle, count
+import asyncio
+from functools import wraps
 
 take = lambda n, iter: (iter.next() for _ in range(n))
 
