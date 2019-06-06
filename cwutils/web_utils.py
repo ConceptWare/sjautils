@@ -1,5 +1,38 @@
 import requests
 
+import http.client
+from urllib.parse import urlparse
+from bs4 import BeautifulSoup
+
+
+def url_soup(url, kind='html5'):
+  return BeautifulSoup(requests.get(url).text, kind)
+
+def get_server_status_code(url):
+  """
+  Download just the header of a URL and
+  return the server's status code.
+  """
+  # http://stackoverflow.com/questions/1140661
+  host, path = urlparse(url)[1:3]  # elems [1] and [2]
+  try:
+    conn = http.client.HTTPConnection(host)
+    conn.request('HEAD', path)
+    return conn.getresponse().status
+  except Exception as e:
+    return None
+
+
+def check_url(url):
+  """
+  Check if a URL exists without downloading the whole file.
+  We only check the URL header.
+  """
+  # see also http://stackoverflow.com/questions/2924422
+  good_codes = [http.client.OK, http.client.FOUND, http.client.MOVED_PERMANENTLY]
+  return get_server_status_code(url) in good_codes
+
+
 class WebInterface(object):
   '''
   Purpose of this class is to provide restful calls to a webserver.  
