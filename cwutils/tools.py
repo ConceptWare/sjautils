@@ -95,7 +95,7 @@ def is_url(string):
     return False
 
   if not '://' in string:
-    return test_prefix('https') || test_prefix('http')
+    return test_prefix('https') or  test_prefix('http')
   return True
 
 def set_and(fn, values):
