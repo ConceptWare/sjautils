@@ -60,11 +60,11 @@ if __name__ == '__main__':
 
 
 path = os.path.dirname(__file__) 
-with open(os.path.join(path, 'eff_large_wordlist.txt')) as f:
-    words = dict([line.split() for line in f])
 
 import random
 word_key = lambda:  ''.join([str(random.randint(1,6),10) for _ in range(5)])
 def n_words(n=3, sep=''):
-    return sep.join([words[word_key()] for _ in range(n)])
+   with open(os.path.join(path, 'eff_large_wordlist.txt')) as f:
+      words = dict([line.split() for line in f])
+   return sep.join([words[word_key()] for _ in range(n)])
 
