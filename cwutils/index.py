@@ -6,6 +6,9 @@ def make_id(nbits):
     attempt = radix.str(num, 62)
     return ('z' + attempt) if attempt[0].isdigit() else attempt
 
+def decode_id(an_id):
+    return radix.decode_id(an_id, 62)
+
 
 class Index:
 

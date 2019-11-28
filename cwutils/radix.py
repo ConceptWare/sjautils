@@ -48,6 +48,15 @@ def str( number, radix ):
 def random_id(id_bit_size, alphabet_size=len(alphabet)):
    return str(random.getrandbits(id_bit_size), alphabet_size)
 
+def decode_id(an_id, alphabet_size = 62):
+   rev = an_id[::-1]
+   ans = 0
+   factor = 1
+   for c in rev:
+      ans = ans + factor * alphabet.find(c)
+      factor = factor * alphabet_size
+   return ans
+
 if __name__ == '__main__':
    src = 'qwertyuioplkjhgfdsazxcvbnm0987654321'
    dst = 79495849566202193863718934176854772085778985434624775545

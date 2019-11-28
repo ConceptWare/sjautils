@@ -109,6 +109,8 @@ def set_or(fn, values):
 
 
 def match_fields(pat, aString, *fields):
+
+
   match = re.search(pat, aString)
   data = match.groupdict() if match else None
   return [data.get(f, None) for f in fields] if data else [None for _ in fields]
