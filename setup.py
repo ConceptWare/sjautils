@@ -8,5 +8,6 @@ setup(name='cwutils',
       author_email='samantha@conceptwareinc.com',
       license='internal',
       packages=['cwutils'],
-      install_requires = ['validators'],
+      scripts=['cwutils/word_pass'],
+      install_requires = ['validators', 'requests', 'beautifulsoup4'],
       zip_safe=False)

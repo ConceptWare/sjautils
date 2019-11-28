@@ -16,7 +16,7 @@ print radix.str( 10, 16 ), radix.str( 1570137287, 36 ) # a python
 """
 
 
-import string, random
+import string, random, os
 
 alphabet = string.digits + string.ascii_letters + '?$'
 
@@ -68,6 +68,12 @@ if __name__ == '__main__':
    print ("%s radix 36 is\n%d decimal" % (src, dst))
 
 
-# EOF
-## end of http://code.activestate.com/recipes/222109/ }}}
+path = os.path.dirname(__file__) 
+
+import random
+word_key = lambda:  ''.join([str(random.randint(1,6),10) for _ in range(5)])
+def n_words(n=3, sep=''):
+   with open(os.path.join(path, 'eff_large_wordlist.txt')) as f:
+      words = dict([line.split() for line in f])
+   return sep.join([words[word_key()] for _ in range(n)])
 
