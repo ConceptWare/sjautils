@@ -9,5 +9,5 @@ setup(name='cwutils',
       license='internal',
       packages=['cwutils'],
       scripts=['cwutils/word_pass'],
-      install_requires = ['validators', 'requests', 'beautifulsoup4'],
+      install_requires = ['validators', 'requests', 'beautifulsoup4', 'pyyaml'],
       zip_safe=False)
