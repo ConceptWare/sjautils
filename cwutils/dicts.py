@@ -103,7 +103,7 @@ class DictObject(dict):
         self[name] = val
 
 
-class LockedDict(DictObject):
+class ImmutableKeysDict(DictObject):
     '''DictObject that will not accept new keys'''
 
     def __init__(self, **kvs):

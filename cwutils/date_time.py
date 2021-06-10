@@ -3,6 +3,18 @@ import datetime, time, pytz
 timestamp = lambda: int(time.time())
 epoch_seconds = lambda d: d.timestamp()
 
+perDay = 24 * 60 * 60
+perYear = perDay * 365.25
+
+def _scaledEpoch(scale, e = None):
+    e = e or time.time()
+    return e / scale
+
+def dayNum(e = None):
+    return _scaledEpoch(perDay, e)
+
+def yearNum(e = None):
+    return _scaledEpoch(perYear, e)
 
 def epoch_iso_day(epoch):
     ts = time.gmtime(epoch)

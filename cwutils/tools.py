@@ -64,39 +64,18 @@ class ByNameId:
 
 
 def as_list(fn, *args, **kwargs):
-  'because python3 made way two many things generators effectively'
+  """because python3 made way two many things generators and/or special objects"""
   return list(fn(*args, **kwargs))
 
 def lmap(fn, *iterables):
   return as_list(map, fn, *iterables)
 
 def dict_keys(a_dict):
-  '''
-  Since 3.x was stupid enough to make dict.keys() return something not indexable
-  :param a_dict: the dict to get keys for
-  :return: return keys as a list
-  '''
   return list(a_dict.keys())
 
 def dict_values(a_dict):
-  '''
-  Since 3.x was stupid enough to make dict.values() return something not indexable
-  :param a_dict: the dict to get keys for
-  :return: return keys as a list
-  '''
   return list(a_dict.values())
 
-def is_url(string):
-  def test_prefix(prefix):
-    string = 'https://' + string
-    trial = validators.url(string)
-    if not isinstance(trial,validators.ValidationFailure):
-      return True
-    return False
-
-  if not '://' in string:
-    return test_prefix('https') or  test_prefix('http')
-  return True
 
 def set_and(fn, values):
   res = fn(values[0])
@@ -114,12 +93,13 @@ def set_or(fn, values):
 def match_fields(pat, aString, *fields):
 
 
-  match = re.search(pat, aString)
-  data = match.groupdict() if match else None
-  return [data.get(f, None) for f in fields] if data else [None for _ in fields]
+    match = re.search(pat, aString)
+    data = match.groupdict() if match else None
+    return [data.get(f, None) for f in fields] if data else [None for _ in fields]
 
 def sub_pipes(*pipes):
     return {p: sub.PIPE for p in pipes}
+    
 standard_pipes = sub_pipes('stdin', 'stdout', 'stderr')
 
 def bytesToString(val):
@@ -208,10 +188,13 @@ def not_empty(seq):
 
 
 def pruning_tree_collect(root, children_function, test_function, result_function=None):
-  """returns the nodes closest to the root nodes of the tree that satisfy the test_function.
-      The value returned for a satisfying node is determined by the result_function which
-          defaults to the node itself."""
-  if result_function is None: result_function = identity_function
+  """
+  returns the nodes closest to the root nodes of the tree that satisfy the test_function.
+  The value returned for a satisfying node is determined by the result_function which
+  defaults to the node itself.
+  """
+  if result_function is None: 
+    result_function = identity_function
   results = []
 
   def do_node(node):
@@ -315,38 +298,6 @@ def plain2cipher(key, plain):
 def cipher2plain(key, cipher):
   return decrypt(key, hexord2str(cipher))
 
-
-class ObjectDict(dict):
-  def __init__(self, **contents):
-    for k,v in contents.items():
-      if isinstance(v, dict):
-        contents[k] = ObjectDict(**v)
-    super(ObjectDict, self).__init__(**contents)
-    
-
-  def __getattr__(self, key):
-    return self.get(key)
-
-  def __setattr__(self, key, val):
-    if isinstance(val, dict):
-      val = ObjectDict(**val)
-    self[key] = val
-
-def dict_diff(incoming, existing):
-  """
-  Compute and return dictionary of changes in incoming
-  from what is in existing including new keys.  This only does
-  the top level in case of nested dictionary.
-  :param incoming: incoming changes
-  :param existing: existing dictionary information
-  :return: actual changes from incoming over existing
-  """
-  result = {}
-  for k,v in incoming.items():
-    if v != existing.get(k, None):
-      result[k] = v
-  return result
-
 def splitter(lst):
   sz = len(lst)
   if sz == 0:
@@ -362,20 +313,3 @@ def random_pick(lst):
   return lst[random.randint(0, len(lst) - 1)]
 
 
-class DictObject(dict):
-  def __init__(self, **data):
-    super().__init__(**data)
-    self._adjust_dicts()
-
-  def _adjust_dicts(self):
-    for k,v in self.items():
-      if isinstance(v, dict):
-        self[k] = DictObject(**v)
-
-  def __getattr__(self, name):
-    return self.get(name)
-
-  def __setattr__(self, name, val):
-    if isinstance(val, dict):
-      val = DictObject(**val)
-    self[name] = val

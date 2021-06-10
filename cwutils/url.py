@@ -1,4 +1,8 @@
 from cwutils.SocialMedia import get_sharing_url
+import validators
+
+def is_url(string):
+    return validators.url(string)
 
 
 def url_domain(url):

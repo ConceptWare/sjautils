@@ -1,7 +1,12 @@
 __author__ = 'samantha'
-from .tools import gensym
+from cwutils.tools import gensym
 
 class reader(property):
+    """
+    property with only reader specified
+    ex.
+      foo = reader('foo')
+    """
     def __init__(self, varname, default=None):
         def _reader(obj):
             if not hasattr(obj, varname):
