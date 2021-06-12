@@ -5,8 +5,6 @@ from contextlib import contextmanager
 import re, time
 import os, types
 import asyncio
-import airbrake
-from boto3.dynamodb import types as dynamo_types
 import uuid
 
 
@@ -278,8 +276,6 @@ def to_decimal(d):
     return Decimal(str(d)) if isinstance(d, float) else d
 
 
-decimal_fixer = value_fixer(value_test=lambda o: isinstance(o, Decimal), fix=decimal_fix)
-decimal_input_fix = value_fixer(value_test=lambda o: isinstance(o, float), fix=to_decimal)
 remove_falsey = value_dropper(drop_test=lambda o: o == '')
 float_to_int = value_fixer(value_test=lambda o: isinstance(o, float), fix=int)
 
@@ -414,11 +410,3 @@ def up_dir(n, path):
     return res
 
 
-def makedbobj(r):
-    """
-    Take a raw record from dynamo and turn it into a correctly typed dict
-    """
-
-    deser = dynamo_types.TypeDeserializer()
-    obj = {k: deser.deserialize(v) for k, v in r}
-    return remdec(obj)
