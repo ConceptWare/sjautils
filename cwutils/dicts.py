@@ -102,6 +102,12 @@ class DictObject(dict):
             val = DictObject(**val)
         self[name] = val
 
+def dict_keys(a_dict):
+  return list(a_dict.keys())
+
+def dict_values(a_dict):
+  return list(a_dict.values())
+
 
 class ImmutableKeysDict(DictObject):
     '''DictObject that will not accept new keys'''

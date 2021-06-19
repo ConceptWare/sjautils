@@ -70,12 +70,6 @@ def as_list(fn, *args, **kwargs):
 def lmap(fn, *iterables):
   return as_list(map, fn, *iterables)
 
-def dict_keys(a_dict):
-  return list(a_dict.keys())
-
-def dict_values(a_dict):
-  return list(a_dict.values())
-
 
 def set_and(fn, values):
   res = fn(values[0])
