@@ -1,4 +1,4 @@
-from cwutils.SocialMedia import get_sharing_url
+from sja_utils.SocialMedia import get_sharing_url
 import validators
 
 def is_url(string):

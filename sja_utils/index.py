@@ -1,5 +1,5 @@
 import random
-from . import radix
+from sja_utils import radix
 
 def make_id(nbits):
     num = random.getrandbits(nbits)

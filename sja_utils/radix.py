@@ -20,9 +20,8 @@ import string, random, os
 
 alphabet = string.digits + string.ascii_letters + '?$'
 
-def str( number, radix ):
-   """str( number, radix ) -- reverse function to int(str,radix) and long(str,radix)"""
-
+def to_str( number, radix ):
+   """to_str( number, radix ) -- reverse function to int(str,radix) and long(str,radix)"""
 
    abc = string.digits + string.ascii_letters + '?$'
    maxr = len(abc)
@@ -46,7 +45,7 @@ def str( number, radix ):
    # never here because number >= 0, radix > 0, we repeat (number /= radix)
 
 def random_id(id_bit_size, alphabet_size=len(alphabet)):
-   return str(random.getrandbits(id_bit_size), alphabet_size)
+   return to_str(random.getrandbits(id_bit_size), alphabet_size)
 
 def decode_id(an_id, alphabet_size = 62):
    rev = an_id[::-1]
@@ -71,7 +70,7 @@ if __name__ == '__main__':
 path = os.path.dirname(__file__) 
 
 import random
-word_key = lambda:  ''.join([str(random.randint(1,6),10) for _ in range(5)])
+word_key = lambda:  ''.join([to_str(random.randint(1,6),10) for _ in range(5)])
 def n_words(n=3, sep=''):
    with open(os.path.join(path, 'eff_large_wordlist.txt')) as f:
       words = dict([line.split() for line in f])
