@@ -1,29 +1,11 @@
-from cwutils.tools import DictObject
+from sja_utils.dicts import DictObject
 import json, os
 import yaml
 
 class Environment(DictObject):
   def __init__(self):
-    defaults = dict(
-      PYTHON_AIRBRAKE_PROJECT_ENV = 'stage',
-      PYTHON_AIRBRAKE_PROJECT_ID = '219081',
-      PYTHON_AIRBRAKE_PROJECT_KEY='1c722767e36562df001dc8c87bf56453',
-      DEFAULT_LANG='en',
-      NAMED_ENV='dev',
-      ENVIRONMENT='dev',
-      SEGMENT_WRITE_KEY='KOGKqAin2rhjMvqVXdjxJ8a24eaA85k2',
-      ALLOW_USER_INVITES_DEFAULT=True,
-      ALLOW_USER_SIGNUP_DEFAULT = True,
-      ALLOW_GROUP_CREATION_DEFAULT = True,
-      ALLOW_GROUP_DISCOVERY_DEFAULT = True,
-      DEPARTMENTS_IN_SIGNUP_DEFAULT = False,
-      DEPARTMENTS_IN_SIGNUP_REQUIRED_DEFAULT = False,
-      LOCATIONS_IN_SIGNUP_DEFAULT = False,
-      LOCATIONS_IN_SIGNUP_REQUIRED_DEFAULT = False,
-      SUPPORT_MULTIPLE_LANGUAGES_DEFAULT = False,
-      POLICY_BASE_URL = os.environ.get('POLICY_BASE_URL', 'baseurl'),
-      REPORTS_BUCKET='esreportsdev'
-    )
+    defaults = dict()
+
     super().__init__(**defaults)
 
   def find_env(self):

@@ -1,7 +1,7 @@
 from collections import defaultdict
 from itertools import chain
 
-from .tools import unique
+from sja_utils.tools import unique
 
 def identity_function(x):
     return x
@@ -45,11 +45,21 @@ def always_true(x):
     return True
 
 def tree_eval(thunk, recurse_test, arg, yield_test=None):
+    """
+    Tages an argument that may or may not be a conventional tree
+    and recursively returns yields items that pass a yield test.
+    If yield_test is identity then all unique items are returned.
+    @param thunk: function that takes a value to multiple values
+    @param returse_test: function determining whether we should recurse on an item
+    @param arg: starting item or root 
+    @param yield_test: additional test if item is one we want to yield
+    @results: a generator on the unique items
+    """
     seen = set()
-    yield_test = identity_function if not yield_test else yield_test
+    yield_test = yield_test or identity_function
+    
     def do_node(val):
         for item in thunk(val):
-            yield_it = yield_test(item)
             if yield_test(item):
                 if item not in seen:
                     seen.add(item)
@@ -62,6 +72,11 @@ def tree_eval(thunk, recurse_test, arg, yield_test=None):
     return do_node(arg)
 
 def complement(fun):
+    """
+    Given a general function returns a function with
+    '_complement' appened to the the name of the original function
+    as its name.
+    """
     def inner(*args, **kwargs):
         return not fun(*args, **kwargs)
     inner.func_name = fun.func_name + '_complement'

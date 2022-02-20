@@ -105,9 +105,6 @@ class DictObject(dict):
 def dict_keys(a_dict):
   return list(a_dict.keys())
 
-def dict_values(a_dict):
-  return list(a_dict.values())
-
 
 class ImmutableKeysDict(DictObject):
     '''DictObject that will not accept new keys'''
@@ -128,7 +125,7 @@ def param_dict(smash_kwargs=True):
     '''
     To be called within a function. Returns a dictionary of values the function was called with.
     :return: dictionary of parameter values.
-    :param smash_kwangs - whether to return kwargs as top level members of the dictionary
+    :param smash_kwargs - whether to return kwargs as top level members of the dictionary
     :return the dictionary of {param_name => value}
     '''
 

@@ -1,6 +1,6 @@
 import subprocess as sub
 import os
-from cwutils.utils import bytesToString, get_logger
+from sja_utils.utils import bytesToString, get_logger
 
 logger = get_logger()
 
