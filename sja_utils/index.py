@@ -3,7 +3,7 @@ from sja_utils import radix
 
 def make_id(nbits):
     num = random.getrandbits(nbits)
-    attempt = radix.str(num, 62)
+    attempt = radix.to_str(num, 62)
     return ('z' + attempt) if attempt[0].isdigit() else attempt
 
 def decode_id(an_id):
