@@ -9,9 +9,7 @@ def make_id(nbits):
 def decode_id(an_id):
     return radix.decode_id(an_id, 62)
 
-
 class Index:
-
     """This class generates base 64 encoded strings from a random number of bits."""
 
     by_name = {}

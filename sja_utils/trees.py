@@ -1,9 +1,9 @@
 __author__ = 'samantha'
 
-from .class_utils import immediate_superclasses
-from .category import identity_function
-from .properties import reader, accessor
-
+from sja_utils.class_utils import immediate_superclasses
+from sja_utils.category import identity_function
+from sja_utils.properties import reader, accessor
+from itertools import chain
 node_value = lambda x: x.value
 node_itself = identity_function
 
@@ -42,6 +42,14 @@ def tree_order(hierarchy, sequence,
         if value in data:
             yield data[value]
 
+
+class BaseNode():
+    def __init__(self, value, *children):
+        self._value = value
+        self._children = children
+
+    value = accessor('_value')
+    children = reader('_children')
 
 class Node(object):
     """general node for a tree has only value and set of child nodes"""
@@ -130,18 +138,17 @@ class BinaryNode(Node):
 
 class Tree(object):
     def __init__(self, ordered=False, unique=False, key_extractor=identity_function,
-                 value_extractor=identity_function, parent_extractor=None):
+                 parent_extractor=None):
         """
         Create tree from given root
-        :param root:
         :param ordered:
         :param unique:
-        :param make_parent:
+        :key_extractor: function to extract key from value of node or to find node for
+        :parent_extractor: function to extract parent[s] given node valueo
         """
         self._roots = []
         self._root_keys = set()
         self._key_fn = key_extractor
-        self._value_fn = value_extractor
         self._parent_fn = parent_extractor
         self._ordered = ordered
         self._unique = unique
@@ -159,56 +166,48 @@ class Tree(object):
         if key not in self._root_keys:
             self._roots.append(node)
 
-    def node_from_data(self, data):
-        key = self._key_fn(data)
+    def node_from_value(self, value):
+        key = self._key_fn(value)
         node = self.get_node(key)
         if not node:
-            node = Node(self._value_fn(data))
+            node = Node(value)
             self._node_map[key] = node
         return node
 
     def get_node(self, node_id):
         return self._node_map.get(node_id)
 
-    def add_with_data(self, data, parent_key=None):
-        node = self.get_node(self._key_fn(data))
+    def add_vith_value(self, value, parent_key=None):
+        key = self._key_fn(value)
+        node = self.get_node(key)
         if not node:
-            node = self.node_from_data(data)
+            node = self.node_from_value(value)
             pnode = self.get_node(parent_key)
             if not pnode:
-                parent = self._parent_fn(data) if self._parent_fn else None
-                if parent:
-                    pnode = self.add_with_data(parent)
-            if pnode:
-                pnode.add_child_node(node)
-            else:
-                self._root = node
+                parents = self._parent_fn(value) if self._parent_fn else None
+                if parents:
+                    for parent in parents:
+                        pnode = self.add_with_value(parent)
+                        pnode.add_child(node)
+                else:
+                    self.add_root(node)
         return node
 
     def get_parent(self, parent_data):
-        return self.node_from_data(parent_data)
+        return self.node_from_value(parent_data)
 
     def __contains__(self, val):
         return val in self._node_map
 
-    def add_parent_child(self, parent_value, child_value, dup_if_missing=False):
-        parent = self._get_parent(parent_value)
-        if parent:
-            child = self._node_map.get(child_value)
-            if child and self._unique:
-                raise Exception('A node with value %s is already in the unique tree' % child_value)
-            else:
-                new_child = parent.__class__(child_value)
-                parent.add_child_node(new_child)
-                if not child:
-                    self._node_map[child_value] = new_child
-
     def pre_order(self, fun=identity_function, node_function=node_value):
-        return self._root.pre_order(fun)
+
+        gens =  [root.pre_order(fun, node_function) for root in self._roots]
+        seen = set()
+        return gens[0] if len(gens) == 1 else gens
 
     def post_order(self, fun=identity_function, node_function=node_value):
-        return self._root.post_order(fun)
-
+        gens =  [root.post_order(fun, node_function) for root in self._roots]
+        return gens[0] if len(gens) == 1 else gens
 
 
 class BinaryTree(Tree):
@@ -216,7 +215,7 @@ class BinaryTree(Tree):
         super(BinaryTree, self).__init__(root)
 
     def in_order(self, fun=identity_function, node_function=node_value):
-        return self._root.in_order(fun)
+        return self._roots[0].in_order(fun)
 
     def insert(self, value):
         pass
@@ -228,73 +227,4 @@ class BinaryTree(Tree):
         pass
 
 
-class MultiParentTree(Tree):
-    def __init__(self, root, ordered=False):
-        super(MultiParentTree, self).__init__(root, ordered=ordered)
-        self._node_map = {}
 
-    def add_with_data(self, data, parent_keys=None):
-        node = self.get_node(self._key_fn(data))
-        if not node:
-            node = self.node_from_data(data)
-            parents = self._parent_fn(data)
-            for parent in parents:
-                p_node = self.get_node(self._key_fn(parent))
-                if not p_node:
-                    p_node = self.add_with_data(parent)
-                p_node.add_child_node(node)
-        return node
-
-    def add_parent_child(self, parent_value, child_value):
-        parent = self._get_parent(parent_value)
-        if parent:
-            child = self._node_map.get(child_value)
-            if not child:
-                child = parent.__class__(child_value)
-                self._node_map[child_value] = child
-            parent.add_child_node(child)
-
-
-class ClassHierarchy(MultiParentTree):
-    def __init__(self, the_root):
-        root = the_root if isinstance(the_root, Node) else Node(the_root)
-        super().__init__(root)
-        order = root.pre_order(identity_function, node_function=node_itself)
-        for node in order:
-            self._node_map[node.value] = node
-
-    def make_parent(self, parent_class):
-        for superclass in immediate_superclasses(parent_class):
-            parent = self._get_parent(superclass)
-            self.add_parent_child(superclass, parent_class)
-
-
-if __name__ == '__main__':
-    # test pruning_tree__collect
-    class Node:
-        def __init__(self, value):
-            self.val = value
-            self._children = []
-
-        def add_child(self, c):
-            self._children.append(c)
-
-        def gen_test(value):
-            return lambda x: x.val == value
-
-        children = lambda x: x._children
-        root = Node(6)
-        a = Node(5)
-        b = Node(4)
-        c = Node(6)
-        d = Node(4)
-        e = Node(4)
-        root.add_child(b)
-        root.add_child(c)
-        c.add_child(d)
-        b.add_child(e)
-        res = pruning_tree_collect(root, children, gen_test(4))
-        # print res
-        assert (len(res) == 2)
-        assert (b in res)
-        assert (d in res)
