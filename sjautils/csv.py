@@ -1,5 +1,5 @@
 import csv, io
-from sja_utils import utils
+from sjautils import utils
 
 
 def homogenize_fields(data):

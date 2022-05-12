@@ -1,7 +1,7 @@
 from collections import defaultdict
 from itertools import chain
 
-from sja_utils.tools import unique
+from sjautils.tools import unique
 
 def identity_function(x):
     return x

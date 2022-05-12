@@ -1,4 +1,4 @@
-from sja_utils.dicts import DictObject
+from sjautils.dicts import DictObject
 import json, os
 import yaml
 

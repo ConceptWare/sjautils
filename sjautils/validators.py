@@ -1,7 +1,7 @@
 from functools import reduce
 import pytz
-from sja_utils import utils
-from sja_utils.date_time import timestamp
+from sjautils import utils
+from sjautils.date_time import timestamp
 import validators
 
 enums = dict(

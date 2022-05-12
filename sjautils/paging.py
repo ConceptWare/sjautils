@@ -1,5 +1,5 @@
 from collections import deque
-from sja_utils.utils import get_logger
+from sjautils.utils import get_logger
 from functools import wraps
 import time
 

@@ -1,5 +1,5 @@
 __author__ = 'samantha'
-from sja_utils.tools import gensym
+from sjautils.tools import gensym
 
 class reader(property):
     """
