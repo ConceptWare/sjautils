@@ -1,5 +1,5 @@
 from fastapi.requests import Request
-from om_int_common.web.exceptions import GenericWebException
+from sjautils.web.exceptions import GenericWebException
 
 def split_special(orig_args, remainder='json'):
     response_only = orig_args.pop('response_only', False)
