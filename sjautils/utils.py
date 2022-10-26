@@ -7,6 +7,14 @@ import os, types
 import asyncio
 import uuid
 
+def snake_to_camel_case(s, first_cap=False):
+    parts = s.split('_')
+    first = parts[0].capitalize() if first_cap else parts[0]
+    rest = [p.capitalize() for p in parts[1:]]
+    parts = [first] + rest
+    return ''.join(parts)
+
+
 
 def bytesToString(val):
     return val.decode('utf-8') if isinstance(val, bytes) else val
