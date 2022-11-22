@@ -10,5 +10,6 @@ setup(name='sjautils',
       license='internal',
       packages=packages,
       scripts=['sjautils/word_pass'],
-      install_requires = ['validators', 'requests', 'beautifulsoup4', 'pyyaml'],
+      install_requires = ['validators', 'requests', 'beautifulsoup4', 'pyyaml', 'pytest',
+                          'pytest-async', 'pyzmq'],
       zip_safe=False)
