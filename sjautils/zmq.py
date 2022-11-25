@@ -97,15 +97,21 @@ class Server:
         return self._socket
 
     def reply(self, data):
-        self._socket.send(self._protocol.encode(data))
+        self.socket.send_string(self._protocol.encode(data))
+
+    def return_exception(self, exception):
+        data = dict(
+            exceptions = [str(exception)]
+        )
+        self.reply(data)
 
     async def receive(self):
-        msg = await(self._socket.recv())
+        msg = await(self.socket.recv())
         return self._protocol.decode(msg)
 
 
 class Client:
-    def __init__(self, port, ip, context=None, type='tcp'):
+    def __init__(self, port, ip='localhost', context=None, type='tcp'):
         self._context = context or Context()
         self._addr = f'{type}://{ip}:{port}'
         self._socket = None
@@ -119,9 +125,9 @@ class Client:
         return self._socket
 
     def send(self, data):
-        self._socket.send(self._protocol.encode(data))
+        self.socket.send_string(self._protocol.encode(data))
 
     async def receive(self):
-        msg = await(self._socket.recv())
+        msg = await(self.socket.recv())
         return self._protocol.decode(msg)
 
