@@ -1,5 +1,5 @@
 import requests
-from sja.web.utils import json_or_error, split_special
+from sjautils.web.utils import json_or_error, split_special
 from functools import wraps, partial
 import time
 
