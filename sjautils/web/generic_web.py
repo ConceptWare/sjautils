@@ -55,9 +55,9 @@ def request_call(remainder='json'):
 
 
 class GenericWebClient:
-    def __init__(self, url=None, host='localhost', port='8080', user_session=True, **headers):
+    def __init__(self, url=None, host='localhost', port='8080', use_session=True, **headers):
         self._session = requests.Session()
-        self._handler = self._session if user_session else requests
+        self._handler = self._session if use_session else requests
         self._headers = headers
         if headers:
             self._session.headers = headers
