@@ -131,3 +131,15 @@ class Client:
         msg = await(self.socket.recv())
         return self._protocol.decode(msg)
 
+class RPCServer(Server):
+    def __init__(self, port, target, ip='localhost'):
+        super().__init__(port, ip=ip)
+        self._target = target
+
+    def __call__(self, fn_name, *args, **kwargs):
+        fn = getattr(self._target, fn_name, None)
+        try:
+            result = fn(*args, **kwargs)
+            self.reply(result)
+        except Exceptions as e:
+            self.return_exception(e)
