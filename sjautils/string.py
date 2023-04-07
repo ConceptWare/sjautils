@@ -36,3 +36,11 @@ def paren_split(s, splitter, convert=None):
     rest = s[close + 1:]
     parts = split_string(content, splitter, convert=convert)
     return parts, rest
+
+def between(s, first, last, widest=True):
+    if (first in s) and (last in s):
+        start = s.index(first)
+        end = s.rindex(last) if widest else s.index(last)
+        return s[start+1: end].strip()
+    return None
+
