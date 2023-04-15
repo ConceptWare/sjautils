@@ -1,5 +1,7 @@
 import inspect
 
+def first_kv(a_dict):
+    return list(a_dict.items())[0]
 
 def flat_keys(arg, key=''):
     acc = {}
