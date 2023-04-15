@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../cw/pkmdesk/.idea/pkmdesk.iml" filepath="$PROJECT_DIR$/../cw/pkmdesk/.idea/pkmdesk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pyside/.idea/pyside.iml" filepath="$PROJECT_DIR$/../pyside/.idea/pyside.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/pyutils.iml" filepath="$PROJECT_DIR$/.idea/pyutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../cw/uop/.idea/uop.iml" filepath="$PROJECT_DIR$/../cw/uop/.idea/uop.iml" />
     </modules>
   </component>
 </project>

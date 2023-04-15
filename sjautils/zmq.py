@@ -141,5 +141,6 @@ class RPCServer(Server):
         try:
             result = fn(*args, **kwargs)
             self.reply(result)
-        except Exceptions as e:
+        except Exceptionx\
+                as e:
             self.return_exception(e)
