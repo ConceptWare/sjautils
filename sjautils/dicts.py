@@ -3,6 +3,12 @@ import inspect
 def first_kv(a_dict):
     return list(a_dict.items())[0]
 
+def dict_get(a_dict, key, fetcher):
+    known = a_dict.get(key)
+    if not known:
+        known = a_dict[key] = fetcher(key)
+    return known
+
 def flat_keys(arg, key=''):
     acc = {}
 
