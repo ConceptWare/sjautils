@@ -3,7 +3,7 @@ import inspect
 def first_kv(a_dict):
     return list(a_dict.items())[0]
 
-def dict_get(a_dict, key, fetcher):
+def get(a_dict, key, fetcher):
     known = a_dict.get(key)
     if not known:
         known = a_dict[key] = fetcher(key)
@@ -28,7 +28,7 @@ def flat_keys(arg, key=''):
     return acc
 
 
-def dict_diff(new, old):
+def diff(new, old):
     flat_new = flat_keys(new)
     flat_old = flat_keys(old)
     modified = {k: v for k, v in flat_new.items() if k in flat_old and flat_old[k] != v}
@@ -44,7 +44,7 @@ def ensure_in_dict(a_dict, key, value):
         a_dict[key] = value
 
 
-def get_dict_path(a_dict, *keys):
+def get_path(a_dict, *keys):
     '''
     Gets a subpart of a dictionary based on a dictionary navigation path to it.
     :param a_dict: the dictionary to retrieve from
@@ -69,7 +69,7 @@ def without_keys(a_dict, *keys):
     return {k: v for k, v in a_dict.items() if k not in keys}
 
 
-def dict_values(a_dict, *kp):
+def values(a_dict, *kp):
     def get(d, key):
         if '.' in key:
             parts = key.split('.')
@@ -110,7 +110,7 @@ class DictObject(dict):
             val = DictObject(**val)
         self[name] = val
 
-def dict_keys(a_dict):
+def keys(a_dict):
   return list(a_dict.keys())
 
 
