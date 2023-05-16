@@ -12,7 +12,7 @@ def synchronized(func):
 def abstract(func):
     @wraps(func)
     def inner(*args, **kwargs):
-      raise '%s needs a non-abstract implementation' % func.__name__
+      raise Exception('%s needs a non-abstract implementation' % func.__name__)
     return inner
 
 
