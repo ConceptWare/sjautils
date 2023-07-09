@@ -21,15 +21,26 @@ def with_output_to(path, cmd):
     with open(path, 'a') as out:
         sub.Popen(cmd, shell=True, stdout=out, stderr=out)
 
+def clean_output(s):
+    get_output = lambda stuff: [l.strip() for l in stuff.split('\n') if l]
+    if isinstance(s, bytes):
+        s = bytesToString(s)
+    return a_s[0] if (len(a_s) == 1) else a_s
 
 def command_output(command):
     get_output = lambda stuff: [l.strip() for l in stuff.split('\n') if l]
     p = sub.Popen(command, shell=True, **standard_pipes)
     out, err = p.communicate()
 
-    res = get_output(bytesToString(out)) or get_output(bytesToString(err))
-    return res[0] if (len(res) == 1) else res
+    return clean_output(out) or clean_output(err)
 
+
+def command_out_err(command):
+    get_output = lambda stuff: [l.strip() for l in stuff.split('\n') if l]
+    shorten = lambda stuff: stuff[0] if (len(stuff) == 1) else stuff
+    p = sub.Popen(command, shell=True, **standard_pipes)
+    out, err = p.communicate()
+    return clean_output(out), clean_output(err)
 
 def shell_out(command, wait=True, log_it=True):
     if wait:
