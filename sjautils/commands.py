@@ -2,10 +2,12 @@ from sjautils.subprocess_utils import command_out_err
 import os, shutil
 
 def unrar(path, remove_after=True):
-    cmd = f'rar x {path}'
+    if ' ' in path:
+        path = '"' + path + '"'
+    cmd = f'unrar x {path}'
     out,err = command_out_err(cmd)
-    if err:
-        raise Exception(f'{cmd}: err')
+    if err and not out:
+        raise Exception(f'{cmd}: {err}')
     elif remove_after:
         os.remove(path)
 

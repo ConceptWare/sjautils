@@ -25,6 +25,7 @@ def clean_output(s):
     get_output = lambda stuff: [l.strip() for l in stuff.split('\n') if l]
     if isinstance(s, bytes):
         s = bytesToString(s)
+    a_s = get_output(s)
     return a_s[0] if (len(a_s) == 1) else a_s
 
 def command_output(command):
