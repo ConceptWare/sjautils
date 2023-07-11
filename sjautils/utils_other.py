@@ -280,7 +280,6 @@ remove_falsey = value_dropper(drop_test=lambda o: o == '')
 float_to_int = value_fixer(value_test=lambda o: isinstance(o, float), fix=int)
 
 clear_dict = remove_falsey
-remdec = decimal_fixer
 
 
 def simply_flatten(obj):
@@ -409,4 +408,25 @@ def up_dir(n, path):
         res = os.path.dirname(res)
     return res
 
+def walk_doing_files(start, file_filter, file_action, return_files=False):
+    good, bad = [], {}
+    for root, d, files in os.walk(start):
+        to_do = [f for f in files if file_filter(f)]
+        if to_do:
+            curr = os.path.abspath(os.path.curdir)
+            os.chdir(root)
+            for file in to_do:
+                fpath = os.path.join(root, file)
+                try:
+                    file_action(file)
+                    if return_files:
+                        good.append(fpath)
+                except Exception as e:
+                    if return_files:
+                        bad[fpath] = e
+                    else:
+                        print(f'error on {fpath}: {e}')
+            os.chdir(curr)
+    if return_files:
+        return good, bad
 
