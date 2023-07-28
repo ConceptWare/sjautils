@@ -1,4 +1,5 @@
 from math import sqrt
+from sjautils.iterext import satisfying, not_satisfying
 
 
 class Primes:
@@ -13,15 +14,16 @@ class Primes:
 
     @classmethod
     def satisfying(cls, test):
-        return (p for p in cls() if test(p))
-
+        return satisfying(test, cls())
+@
     @classmethod
     def filtered(cls, filter_fn):
-        return cls.satisfying(lambda x: not filter_fn(x))
+        return not satisfying(filter_fn, cls())
 
     @classmethod
-    def pair_tops(cls, sep):
-        return cls.filtered(lambda p: (p > 3) and cls.filter_moduli(p, lambda x: x == sep))
+    def pair_tops(cls, sep=2):
+        big_enough = lambda p: (p - sep) >= 3
+        return cls.satisfying(lambda p: big_enough(p) and cls.filter_moduli(p, lambda x: x == sep))
 
     @classmethod
     def while_lt(cls, val):
