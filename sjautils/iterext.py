@@ -1,4 +1,4 @@
-from itertools import chain, cycle, count
+from itertools import chain, cycle, count, takewhile
 import asyncio
 from functools import wraps
 
@@ -55,11 +55,16 @@ def replace_first(curr, iterable):
     yield item
 
 def take_while(pred, iterable):
-    for curr in iterable:
-        if pred(curr):
-            yield curr
-        else:
-            break
+    return takewhile(pred, iterable)
+
+def satisfying(pred, iterable):
+    return (i for i in iterable if pred(i))
+
+def not_pred(pred):
+    return lambda x: not pred(x)
+
+def not_satisfying(pred, iterable):
+    return satisfying(not_pred(pred), iterable)
 
 def test_take_while():
     data = [1] + list(range(2, 12, 2))
