@@ -57,14 +57,21 @@ def replace_first(curr, iterable):
 def take_while(pred, iterable):
     return takewhile(pred, iterable)
 
+def while_satisfying(pred, iterable):
+    return takewhile(pred, iterable)
+
 def satisfying(pred, iterable):
-    return (i for i in iterable if pred(i))
+    return (p for p in iterable if pred(p))
 
 def not_pred(pred):
     return lambda x: not pred(x)
 
 def not_satisfying(pred, iterable):
     return satisfying(not_pred(pred), iterable)
+
+
+def while_not_satisfying(pred, iterable):
+    return while_satisfying(not_pred(pred), iterable)
 
 def test_take_while():
     data = [1] + list(range(2, 12, 2))

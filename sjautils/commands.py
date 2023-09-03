@@ -1,4 +1,5 @@
 from sjautils.subprocess_utils import command_out_err
+from sjautils.string import after
 import os, shutil
 
 def unrar(path, remove_after=True):
@@ -30,7 +31,7 @@ sample_dlp = """
 
 def download_video(vurl):
     cmd = f'yt-dlp {vurl}'
-    out, err = comand_out_err(cmd)
+    out, err = command_out_err(cmd)
     if not err:
         for l in out:
             if 'Destination:' in out:

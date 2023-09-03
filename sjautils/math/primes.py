@@ -1,24 +1,17 @@
 from math import sqrt
-from sjautils.iterext import satisfying, not_satisfying
-
+from sjautils.iterext import while_satisfying, while_not_satisfying
+from sjautils import iterext as itx
 
 class Primes:
     known_primes = [2, 3, 5, 7, 11, 13]
 
     @classmethod
-    def until(cls, test):
-        for p in cls():
-            if not test(p):
-                break
-            yield p
+    def satisfying(cls, test):
+        return while_satisfying(test, cls())
 
     @classmethod
-    def satisfying(cls, test):
-        return satisfying(test, cls())
-@
-    @classmethod
     def filtered(cls, filter_fn):
-        return not satisfying(filter_fn, cls())
+        return itx.not_satisfying(filter_fn, cls())
 
     @classmethod
     def pair_tops(cls, sep=2):
@@ -27,7 +20,7 @@ class Primes:
 
     @classmethod
     def while_lt(cls, val):
-        return cls.until(lambda n: n < val)
+        return cls.satisfying(lambda n: n < val)
 
     @classmethod
     def filter_moduli(cls, n, filter_fn):
@@ -42,7 +35,7 @@ class Primes:
 
     @classmethod
     def while_le(cls, val):
-        return cls.until(lambda n: n <= val)
+        return cls.satisfying(lambda n: n <= val)
 
     @classmethod
     def moduli(cls, n):

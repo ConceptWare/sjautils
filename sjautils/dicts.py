@@ -4,6 +4,10 @@ def first_kv(a_dict):
     return list(a_dict.items())[0]
 
 def get(a_dict, key, fetcher):
+    """
+    More or less caching dict with fetche function to fetch
+    and cache value of key if not present.  Returns value of key
+    """   
     known = a_dict.get(key)
     if not known:
         known = a_dict[key] = fetcher(key)
