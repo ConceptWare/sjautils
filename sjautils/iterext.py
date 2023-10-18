@@ -1,4 +1,4 @@
-from itertools import chain, cycle, count, takewhile
+from itertools import chain, cycle, count, takewhile, dropwhile, islice
 import asyncio
 from functools import wraps
 
@@ -31,16 +31,10 @@ class take_only_while(object):
 
 
 def drop_while(predicate, iterable):
-    # dropwhile(lambda x: x<5, [1,4,6,4,1]) --> 6 4 1
-    iterable = iter(iterable)
-    check = True
-    for x in iterable:
-        if check:
-            if predicate(x):
-                continue
-            else:
-                check = False
-        yield x
+    return dropwhile(predicate, iterable)
+
+def take_n(n, iterable):
+    return islice(iterable, n)
 
 def replace_first(curr, iterable):
   """
