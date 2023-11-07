@@ -3,6 +3,10 @@ import requests
 import http.client
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
+import validators
+
+def is_url(what):
+  return validators.url(what) == True
 
 
 def url_soup(url, kind='html5'):

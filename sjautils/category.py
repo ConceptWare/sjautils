@@ -46,7 +46,7 @@ def always_true(x):
 
 def tree_eval(thunk, recurse_test, arg, yield_test=None):
     """
-    Tages an argument that may or may not be a conventional tree
+    Takes an argument that may or may not be a conventional tree
     and recursively returns yields items that pass a yield test.
     If yield_test is identity then all unique items are returned.
     @param thunk: function that takes a value to multiple values
