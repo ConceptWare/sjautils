@@ -1,6 +1,10 @@
 from sjautils.dicts import DictObject
 import json, os
 import yaml
+from dotenv import find_dotenv, load_dotenv
+
+def load_env():
+  return load_dotenv(find_dotenv())
 
 class Environment(DictObject):
   def __init__(self):
