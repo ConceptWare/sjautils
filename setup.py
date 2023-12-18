@@ -11,5 +11,5 @@ setup(name='sjautils',
       packages=packages,
       scripts=['sjautils/word_pass'],
       install_requires = ['validators', 'requests', 'beautifulsoup4', 'pyyaml', 'pytest',
-                          'pytest-async', 'pyzmq'],
+                          'pytest-async', 'pyzmq', 'python-dotenv'],
       zip_safe=False)
