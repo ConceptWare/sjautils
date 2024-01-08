@@ -57,12 +57,20 @@ def while_satisfying(pred, iterable):
 def satisfying(pred, iterable):
     return (p for p in iterable if pred(p))
 
+def all_satisfy(pred, iterable):
+      for i in iterable:
+            if not pred(i):
+                  return False
+      return True
+
+def while_le(value, iterable):
+      return satisfying(lambda x: x <= val, iterable)
+
 def not_pred(pred):
     return lambda x: not pred(x)
 
 def not_satisfying(pred, iterable):
     return satisfying(not_pred(pred), iterable)
-
 
 def while_not_satisfying(pred, iterable):
     return while_satisfying(not_pred(pred), iterable)
