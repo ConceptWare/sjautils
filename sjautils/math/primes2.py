@@ -32,10 +32,10 @@ class Primes:
         cls.prime_set.add(p)
 
     def possible_factors(self, num):
-        return self.le(num)
+        return self.le(int(sqrt(num)))
 
     def moduli(self, num):
-        return (num%p for p in self.possible_factors)
+        return (num%p for p in self.possible_factors(num))
 
   
     def is_prime(self, n):
@@ -47,7 +47,7 @@ class Primes:
         else:
             return False
 
-    def iterator(self):
+    def __iter__(self):
         for p in self.known_primes:
             yield p
         for candidate in possible_primes(self.known_primes[-1]):
@@ -56,11 +56,30 @@ class Primes:
                 yield candidate
 
     def le(self, val):
-        for p in self.iterator():
+        for p in self:
             if p <= val:
                 yield p
             else:
                 break
+
+    def satisfying(self, pred):
+        return while_satisfying(pred, self)
+
+    def factor(self, n):
+        factors = defaultdict(int)
+
+        for p in self.possible_factors(n):
+            while not n % p:
+                factors[p] += 1
+                n //= p
+            if n == 1:
+                break
+        
+        if n != 1:
+            factors[n] = 1
+
+        return factors
+
 
 primes = Primes()
 
@@ -140,7 +159,7 @@ def gcd(n1, n2):
 
 
 def lcm(*nums):
-    pfs = [Primes.factor(n) for n in nums]
+    pfs = [primes.factor(n) for n in nums]
     factors = combine_factors(max, *pfs)
     return number_from_factors(factors)
 
