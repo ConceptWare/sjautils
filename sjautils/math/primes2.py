@@ -1,4 +1,5 @@
 from math import prod, sqrt
+from bisect import bisect_left
 from functools import reduce
 from itertools import chain, combinations
 from sjautils.iterext import while_satisfying, while_not_satisfying, all_satisfy
@@ -6,21 +7,45 @@ from sjautils import iterext as itx
 from collections import defaultdict
 from math import prod
 
+def six_plus_minus_1(limit, direction=1):
+    limit = int(limit)
+    if direction == 1:
+        mod = limit % 6
+        to_add = (6 - mod) if mod else 0
+        next6 = limit + to_add
+        sides = (-1, 1)
+        test = lambda x: (next6 - 1) <= limit
+    else:
+        next6 = limit - limit%6
+        sides = (1, -1)
+        test = lambda x: (next6 + 1) >= limit
+    first = True
+    to_add = 6 if direction == 1 else -6
+    while next6:
+        a,b  = [next6 + s for s in sides]
+        if first:
+            first = False
+            if test(a):
+                yield b
+            else:
+                yield a
+                yield b
+        else:
+            yield a
+            yield b
+        next6 += to_add
+
+
+
 def possible_primes(starting_after=0):
+    starting_after = int(starting_after)
     first_exc = [2, 3]
-    mult = 1
     for low in first_exc:
         if starting_after < low:
             yield low
-    mult = max((starting_after + 1) // 6, 1)
-    while True:
-        mult6 = mult * 6
-        low, high = mult6 - 1, mult6 + 1
-        if low > starting_after:
-            yield low
-        if high > starting_after:
-            yield high
-        mult += 1
+    starting_after = max(starting_after,3)
+    for possible in six_plus_minus_1(starting_after):
+        yield possible
 
 class Primes:
     known_primes = [2, 3, 5, 7, 11, 13]
@@ -30,6 +55,19 @@ class Primes:
         if succ:
             cls.known_primes.append(p)
         cls.prime_set.add(p)
+
+    def greatest_lt(self, n:int):
+        n = int(n)
+        largest_known = self.known_primes[-1]
+        if largest_known >= n:
+            max_i = bisect_left(self.known_primes, n)
+            return self.known_primes[max_i-1] if max_i else None
+        else:
+            for c in six_plus_minus_1(n, -1):
+                if self.is_prime(c):
+                    return c
+
+        return None
 
     def possible_factors(self, num):
         return self.le(int(sqrt(num)))
