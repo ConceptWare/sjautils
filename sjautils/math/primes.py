@@ -1,131 +1,88 @@
 from math import prod, sqrt
+from bisect import bisect_left
 from functools import reduce
 from itertools import chain, combinations
-from sjautils.iterext import while_satisfying, while_not_satisfying
-from sjautils import iterext as itx
+from sjautils.iterext import while_satisfying, while_not_satisfying, all_satisfy
 from collections import defaultdict
 from math import prod
 
+def six_plus_minus_1(limit, direction=1):
+    limit = int(limit)
+    if direction == 1:
+        mod = limit % 6
+        to_add = (6 - mod) if mod else 0
+        next6 = limit + to_add
+        sides = (-1, 1)
+        test = lambda x: (next6 - 1) <= limit
+    else:
+        next6 = limit - limit%6
+        sides = (1, -1)
+        test = lambda x: (next6 + 1) >= limit
+    first = True
+    to_add = 6 if direction == 1 else -6
+    while next6:
+        a,b  = [next6 + s for s in sides]
+        if first:
+            first = False
+            if test(a):
+                yield b
+            else:
+                yield a
+                yield b
+        else:
+            yield a
+            yield b
+        next6 += to_add
+
+
+
 def possible_primes(starting_after=0):
+    starting_after = int(starting_after)
     first_exc = [2, 3]
-    mult = 1
     for low in first_exc:
         if starting_after < low:
             yield low
-    mult = max((starting_after + 1) // 6, 1)
-    while True:
-        mult6 = mult * 6
-        low, high = mult6 - 1, mult6 + 1
-        if low > starting_after:
-            yield low
-        if high > starting_after:
-            yield high
-        mult += 1
+    starting_after = max(starting_after,3)
+    for possible in six_plus_minus_1(starting_after):
+        yield possible
 
 class Primes:
     known_primes = [2, 3, 5, 7, 11, 13]
     prime_set = set(known_primes)
 
-    @classmethod
     def add_prime(cls, p, succ=False):
         if succ:
             cls.known_primes.append(p)
         cls.prime_set.add(p)
 
-    @classmethod
-    def satisfying(cls, test):
-        return while_satisfying(test, cls())
+    def greatest_lt(self, n:int):
+        n = int(n)
+        largest_known = self.known_primes[-1]
+        if largest_known >= n:
+            max_i = bisect_left(self.known_primes, n)
+            return self.known_primes[max_i-1] if max_i else None
+        else:
+            for c in six_plus_minus_1(n, -1):
+                if self.is_prime(c):
+                    return c
 
-    @classmethod
-    def filtered(cls, filter_fn):
-        return itx.not_satisfying(filter_fn, cls())
+        return None
 
-    @classmethod
-    def pair_tops(cls, sep=2):
-        big_enough = lambda p: (p - sep) >= 3
-        return cls.satisfying(lambda p: big_enough(p) and cls.filter_moduli(p, lambda x: x == sep))
+    def possible_factors(self, num):
+        return self.le(int(sqrt(num)))
 
-    @classmethod
-    def while_lt(cls, val):
-        return cls.satisfying(lambda n: n < val)
+    def moduli(self, num):
+        return (num%p for p in self.possible_factors(num))
 
-    @classmethod
-    def filter_moduli(cls, n, filter_fn):
-        for r in cls.moduli(n):
-            if filter_fn(r):
-                return False
-        return True
-
-    @classmethod
-    def is_prime(cls, n, filtered=0):
-        if n in cls.prime_set:
+  
+    def is_prime(self, n):
+        if n in self.prime_set:
             return True
         mod6 = n % 6
         if mod6 == 1 or mod6 == 5:
-                
-            return cls.filter_moduli(n, lambda x: x == filtered)
+            return all_satisfy(lambda x: x != 0, self.moduli(n))   
         else:
             return False
-
-    
-    @classmethod
-    def while_le(cls, val):
-        return cls.satisfying(lambda n: n <= val)
-
-    @classmethod
-    def moduli(cls, n):
-        return (n%p for p in cls.while_le(sqrt(n)))
-        
-
-    @classmethod
-    def factor(cls, n):
-        # TODO fix me to return defaultdict(int) and use better
-        # algorithm
-        
-
-        factors = defaultdict(int)
-        working = [n]
-
-        low_factors = list(cls.while_le(sqrt(n)))
-    
-        #print(n, factors, low_factors)
-
-        def compute_exp(p):
-            while not working[0] % p:
-                factors[p] += 1
-                working[0] //= p
-            #print('factors added', p, factors[p])
-            
-            
-        for p in low_factors:
-            #print('checking', p, n, working)
-            if working[0] == 1:
-                break
-            if not working[0] % p:
-                compute_exp(p)
-
-        if working[0] != 1:
-            factors[working[0]] = 1
-
-        return factors
-            
-                
-
-                
-                
-
-    
-        
-        
-
-
-    @classmethod
-    def is_pair_max(cls, n, sep=2):
-        return cls.filter_moduli(n, lambda r: (r == 0) or (r == sep))
-
-    def __init__(self):
-        self._last = None
-        self._test = None
 
     def __iter__(self):
         for p in self.known_primes:
@@ -134,6 +91,44 @@ class Primes:
             if self.is_prime(candidate):
                 self.add_prime(candidate, succ=True)
                 yield candidate
+
+    def le(self, val):
+        for p in self:
+            if p <= val:
+                yield p
+            else:
+                break
+
+    def satisfying(self, pred):
+        return while_satisfying(pred, self)
+
+    def factor(self, n):
+        factors = defaultdict(int)
+
+        for p in self.possible_factors(n):
+            while not n % p:
+                factors[p] += 1
+                n //= p
+            if n == 1:
+                break
+        
+        if n != 1:
+            factors[n] = 1
+
+        return factors
+
+
+primes = Primes()
+
+def factor(num):
+    return primes.factor(num)
+
+def moduli(num):
+    return primes.moduli(num)
+
+def is_prime_pair_upper(num, sep=2):
+    return primes.is_prime(num) and all_satisfy(lambda x: x != sep, moduli(num))
+
 
 def factor_string(factors):
     def prime_term(base, exponent):
@@ -150,9 +145,9 @@ def number_from_factors(factors):
     return prod(vals)
     
 def test_factors(n):
-    factors = Primes.factor(n)
+    factors = factor(n)
     the_prod = number_from_factors(factors)
-    assert the_prod == n, f'{factor_string(factors)} should equal {the_sum}'
+    assert the_prod == n, f'{factor_string(factors)} should equal {the_prod}'
 
 
 def expand_factors(factors):
@@ -160,7 +155,7 @@ def expand_factors(factors):
     return reduce(lambda a,b: a + b, parts, [])
 
 def all_divisors(num):
-    factors = expand_factors(Primes.factor(num))
+    factors = expand_factors(factor(num))
     prods = chain.from_iterable(combinations(factors, r) for r in range(len(factors)+1))
     return {prod(p) for p in prods} - {1}
     
@@ -201,7 +196,7 @@ def gcd(n1, n2):
 
 
 def lcm(*nums):
-    pfs = [Primes.factor(n) for n in nums]
+    pfs = [primes.factor(n) for n in nums]
     factors = combine_factors(max, *pfs)
     return number_from_factors(factors)
 
