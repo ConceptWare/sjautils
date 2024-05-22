@@ -109,6 +109,8 @@ class Server:
         msg = await(self.socket.recv())
         return self._protocol.decode(msg)
 
+class ServerLoop(Server):
+    pass
 
 class Client:
     def __init__(self, port, ip='localhost', context=None, type='tcp'):
@@ -124,6 +126,11 @@ class Client:
             self._socket.connect(self._addr)
         return self._socket
 
+    async def call(self, fn_name, *args, **kwargs):
+        self.send(dict(function=fn_name, args=args,
+                       kwargs=kwargs))
+        return await self.receive()
+
     def send(self, data):
         self.socket.send_string(self._protocol.encode(data))
 
@@ -137,10 +144,12 @@ class RPCServer(Server):
         self._target = target
 
     def __call__(self, fn_name, *args, **kwargs):
-        fn = getattr(self._target, fn_name, None)
+        fn = (getattr(self, fn_name, None) or
+              getattr(self._target, fn_name, None))
+        if not fn:
+            raise Exception(f'unknown function {fn_name}')
         try:
             result = fn(*args, **kwargs)
             self.reply(result)
-        except Exceptionx\
-                as e:
+        except Exception as e:
             self.return_exception(e)
